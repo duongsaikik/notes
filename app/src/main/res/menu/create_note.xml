@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+<item
+    android:id="@+id/saveNote_option"
+    android:icon="@drawable/ic_edit_add"
+    android:title=""
+
+    app:showAsAction="always"
+    />
+
+    <item
+        android:icon="@drawable/ic_baseline_more_vert_24"
+        android:title=""
+        app:showAsAction="always"
+        >
+        <menu>
+            <item android:id="@+id/action_add_image"
+                android:title="@string/nh"
+                android:icon="@drawable/ic_image"
+
+                app:showAsAction="ifRoom"
+
+                android:iconTint="@color/colorAccent"
+                />
+            <item android:id="@+id/action_delete_note"
+            android:title="@string/xo"
+                android:icon="@drawable/ic_delete"
+                app:showAsAction="ifRoom"
+                />
+        </menu>
+    </item>
+</menu>
