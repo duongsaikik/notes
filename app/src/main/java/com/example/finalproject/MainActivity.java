@@ -1,6 +1,7 @@
 package com.example.finalproject;
 
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
@@ -27,6 +28,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.SearchView;
 import android.widget.Toast;
+import android.widget.Toolbar;
 
 
 import com.example.finalproject.adapters.NotesAdapter;
@@ -53,6 +55,8 @@ public class MainActivity extends AppCompatActivity implements NotesListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         db = new DBHelper(this);
+
+
 //        ActionBar actionBar;
 //        actionBar = getSupportActionBar();
 //        ColorDrawable colorDrawable = new ColorDrawable(Color.parseColor("#82E0AA"));
@@ -99,9 +103,11 @@ public class MainActivity extends AppCompatActivity implements NotesListener {
 //                    if (noteList.size() != 0){
 //                        notesAdapter.searchNotes(s.toString());
 //                    }
+//
 //            }
 //        });
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -113,20 +119,25 @@ public class MainActivity extends AppCompatActivity implements NotesListener {
             SearchView.OnQueryTextListener listener = new SearchView.OnQueryTextListener() {
                 @Override
                 public boolean onQueryTextSubmit(String s) {
-                    return false;
+                    if (noteList.size() > 0) {
+                        notesAdapter.searchNotes(s);
+                    }
+                    return true;
                 }
 
                 @Override
                 public boolean onQueryTextChange(String s) {
-                    if (noteList.size() != 0){
-                      notesAdapter.searchNotes(s);
-                  }
+                    if (noteList.size() > 0) {
+                        notesAdapter.searchNotes(s);
+                    }
                     return true;
                 }
             };
             searchView.setOnQueryTextListener(listener);
         return true;
     }
+
+
 
     @Override
     public void onNoteClicked(Note note, int position) {
@@ -136,6 +147,7 @@ public class MainActivity extends AppCompatActivity implements NotesListener {
         intent.putExtra("isViewOrUpdate",true);
         intent.putExtra("note",note);
         startActivityForResult(intent,REQUEST_CODE_UPDATE);
+
     }
 
     private void getNotes(final int requestCode,final boolean isNoteDeleted){
@@ -151,8 +163,10 @@ public class MainActivity extends AppCompatActivity implements NotesListener {
                 super.onPostExecute(notes);
 
                 if (requestCode == REQUEST_CODE_SHOW_NOTES){
+                    noteList.clear();
                     noteList.addAll(notes);
                     notesAdapter.notifyDataSetChanged();
+
                 }else if (requestCode == REQUEST_CODE_ADD_NOTE){
                     notes.add(0,notes.get(0));
                     notesAdapter.notifyItemInserted(0);
@@ -160,7 +174,11 @@ public class MainActivity extends AppCompatActivity implements NotesListener {
                 }else if (requestCode == REQUEST_CODE_UPDATE){
                     noteList.remove(noteClickedPosition);
                     if (isNoteDeleted){
-                        notesAdapter.notifyItemRemoved(noteClickedPosition);
+
+                        noteList.clear();
+                        noteList.addAll(notes);
+                        notesAdapter.notifyDataSetChanged();
+
                     }else{
                         noteList.add(noteClickedPosition,notes.get(noteClickedPosition));
                         notesAdapter.notifyItemChanged(noteClickedPosition);

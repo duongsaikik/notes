@@ -134,7 +134,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_12sdp"
                 android:layout_marginEnd="@dimen/_12sdp"
-                android:layout_marginTop="@dimen/_15sdp"
+                android:layout_marginTop="@dimen/_12sdp"
                 android:layout_marginBottom="@dimen/_15sdp"
                 android:background="@null"
                 android:fontFamily="@font/ubuntu_regular"
@@ -147,9 +147,20 @@
                 android:textColor="@color/colorWhite"
                 android:textColorHint="@color/colorTextHint"
                 android:textSize="@dimen/_13ssp"
-                app:layout_constraintBottom_toTopOf="@id/imageNote"
+                app:layout_constraintBottom_toTopOf="@id/deleteImage"
                 app:layout_constraintTop_toBottomOf="@id/inputNoteSubTitle"
                 />
+            <Button
+                android:id="@+id/deleteImage"
+                android:text="Xoá ảnh"
+                android:textStyle="bold"
+                android:textColor="@color/white"
+                app:layout_constraintTop_toBottomOf="@id/inputNote"
+                app:layout_constraintStart_toStartOf="@id/inputNote"
+               app:layout_constraintEnd_toEndOf="@id/inputNote"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:visibility="gone"/>
             <ImageView
                 android:id="@+id/imageNote"
                 android:layout_width="match_parent"
@@ -160,7 +171,7 @@
                 android:adjustViewBounds="true"
                 android:contentDescription="@string/app_name"
                 android:visibility="gone"
-                app:layout_constraintTop_toBottomOf="@id/inputNote"
+                app:layout_constraintTop_toBottomOf="@id/deleteImage"
                 />
         </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -81,6 +81,7 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
         TextView textTitle, textSubTitle, textDateTime,textNoteContent;
         LinearLayout layoutNote;
         RoundedImageView imageNote;
+
          NoteViewHolder(@NonNull View itemView) {
             super(itemView);
             textTitle = itemView.findViewById(R.id.textTitle);
@@ -89,20 +90,30 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
             textDateTime = itemView.findViewById(R.id.textDateTime);
             layoutNote = itemView.findViewById(R.id.layoutNote);
             imageNote = itemView.findViewById(R.id.imageNote);
-        }
+
+         }
         void setNote(Note note){
              //fill data to itemNote
-             textTitle.setText(note.getTitle());
+
+            if (note.getTitle().trim().isEmpty()){
+                textTitle.setVisibility(View.GONE);
+            }else{
+                textTitle.setText(note.getTitle());
+                textTitle.setVisibility(View.VISIBLE);
+            }
+            textTitle.setText(note.getTitle());
              if (note.getSubtitle().trim().isEmpty()){
                  textSubTitle.setVisibility(View.GONE);
              }else{
                  textSubTitle.setText(note.getSubtitle());
-                 textNoteContent.setText(note.getNoteText());
+                 textSubTitle.setVisibility(View.VISIBLE);
              }
+
+            textNoteContent.setText(note.getNoteText());
              textDateTime.setText(
                      note.getDatetime()
              );
-            Log.d("t",textTitle.getText().toString());
+
              //set color for item note
             GradientDrawable gradientDrawable = (GradientDrawable) layoutNote.getBackground();
             if (note.getColor() != null){
@@ -114,6 +125,7 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
                 imageNote.setImageBitmap(BitmapFactory.decodeFile(note.getImage()));
                 imageNote.setVisibility(View.VISIBLE);
             }else{
+
                 imageNote.setVisibility(View.GONE);
             }
 
@@ -131,8 +143,8 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
                     ArrayList<Note> temp = new ArrayList<>();
                     for (Note note: noteSource) {
                         if (note.getTitle().toLowerCase().contains(searchKeyWord.toLowerCase())
-                        || note.getSubtitle().toLowerCase().contains(searchKeyWord.toLowerCase())
-                        || note.getNoteText().toLowerCase().contains(searchKeyWord.toLowerCase())){
+                                || note.getSubtitle().toLowerCase().contains(searchKeyWord.toLowerCase())
+                                || note.getNoteText().toLowerCase().contains(searchKeyWord.toLowerCase())){
                             temp.add(note);
                         }
                     }

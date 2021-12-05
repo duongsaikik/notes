@@ -29,6 +29,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.Button;
 import android.widget.EdgeEffect;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -59,7 +60,7 @@ public class CreateNoteActivity extends AppCompatActivity {
 
     private ImageView imageNote;
     private String selectImagePath;
-
+    private Button deleteImage;
     private Note alreadyAvailableNote;
     private ImageView imageDelete;
     private AlertDialog dialogDelete;
@@ -72,6 +73,7 @@ public class CreateNoteActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
 //        getSupportActionBar().hide();
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setContentView(R.layout.activity_create_note);
 //        ActionBar actionBar;
 //        actionBar = getSupportActionBar();
@@ -85,6 +87,7 @@ public class CreateNoteActivity extends AppCompatActivity {
 //                onBackPressed();
 //            }
 //        });
+        deleteImage = findViewById(R.id.deleteImage);
 
         inputNoteTitle = findViewById(R.id.inputNoteTitle);
         inputNoteSubTitle = findViewById(R.id.inputNoteSubTitle);
@@ -113,6 +116,8 @@ public class CreateNoteActivity extends AppCompatActivity {
             alreadyAvailableNote = (Note) getIntent().getSerializableExtra("note");
             setViewOrUpdate();
         }
+//
+
 //        if (alreadyAvailableNote != null){
 //            imageDelete = findViewById(R.id.imageDelete);
 //            imageDelete.setVisibility(View.VISIBLE);
@@ -141,15 +146,20 @@ public class CreateNoteActivity extends AppCompatActivity {
             case R.id.saveNote_option:
                 saveNote();
                 return true;
+
             case R.id.action_add_image:
                 selectImage();
                 return true;
             case R.id.action_delete_note:
                 showDeleteNoteDialog();
                 return true;
+            case android.R.id.home:
+                onBackPressed();
+                return true;
             default:
-                return super.onOptionsItemSelected(item);
+                break;
         }
+        return super.onOptionsItemSelected(item);
     }
 
     private void setViewOrUpdate(){
@@ -168,15 +178,34 @@ public class CreateNoteActivity extends AppCompatActivity {
         }else{
             imageNote.setVisibility(View.GONE);
         }
+        if (alreadyAvailableNote.getImage() != null && !alreadyAvailableNote.getImage().trim().isEmpty()){
+
+                deleteImage.setVisibility(View.VISIBLE);
+                deleteImage.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                        imageNote.setVisibility(View.GONE);
+                        selectImagePath = null;
+                        deleteImage.setVisibility(View.GONE);
+
+                    }
+                });
+
+
+        }
     }
 
     private void saveNote(){
-        if(inputNoteTitle.getText().toString().trim().isEmpty()){
-            Toast.makeText(this,"Chủ đề không được trống",Toast.LENGTH_SHORT).show();
-            return;
-        }else if(inputNoteSubTitle.getText().toString().trim().isEmpty() && inputNoteText.getText().toString().trim().isEmpty()){
+
+
+//        }else if(inputNoteSubTitle.getText().toString().trim().isEmpty() && inputNoteText.getText().toString().trim().isEmpty()){
+//            Toast.makeText(this,"Nội dung không được trống",Toast.LENGTH_SHORT).show();
+//            return;
+//        }else{
+        if (inputNoteText.getText().toString().trim().isEmpty()){
             Toast.makeText(this,"Nội dung không được trống",Toast.LENGTH_SHORT).show();
-            return;
+               return;
         }else{
             final Note note = new Note();
             note.setTitle(inputNoteTitle.getText().toString());
@@ -205,10 +234,9 @@ public class CreateNoteActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(),"Thêm thất bại",Toast.LENGTH_SHORT).show();
                 }
             }
-
-
-
         }
+
+//        }
 
     }
 
@@ -228,15 +256,16 @@ public class CreateNoteActivity extends AppCompatActivity {
                 view.findViewById(R.id.textDeleteNote).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
+
                         if(db.deleteNote(alreadyAvailableNote.getId())){
-                            Intent intent = new Intent();
+                            Intent intent = new Intent(CreateNoteActivity.this,MainActivity.class);
                             intent.putExtra("isNoteDeleted",true);
                             setResult(RESULT_OK,intent);
-                            finish();
+                            startActivity(intent);
 
                         }else{
                             Toast.makeText(getApplicationContext(),"Xoá thất bại",Toast.LENGTH_SHORT).show();
-                        }
+                       }
                     }
                 });
                 view.findViewById(R.id.textCancel).setOnClickListener(new View.OnClickListener() {
@@ -285,7 +314,7 @@ public class CreateNoteActivity extends AppCompatActivity {
         layoutMiscellaneous.findViewById(R.id.viewColor2).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                selectNoteColor = "#FDBE3B";
+                selectNoteColor = "#E6E7A6";
                 imageView2.setImageResource(R.drawable.ic_done);
                 imageView1.setImageResource(0);
                 imageView3.setImageResource(0);
@@ -297,7 +326,7 @@ public class CreateNoteActivity extends AppCompatActivity {
         layoutMiscellaneous.findViewById(R.id.viewColor3).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                selectNoteColor = "#EE3A3A";
+                selectNoteColor = "#E7A6A6";
                 imageView3.setImageResource(R.drawable.ic_done);
                 imageView2.setImageResource(0);
                 imageView1.setImageResource(0);
@@ -309,7 +338,7 @@ public class CreateNoteActivity extends AppCompatActivity {
         layoutMiscellaneous.findViewById(R.id.viewColor4).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                selectNoteColor = "#438AE5";
+                selectNoteColor = "#A6C8E7";
                 imageView4.setImageResource(R.drawable.ic_done);
                 imageView2.setImageResource(0);
                 imageView3.setImageResource(0);
@@ -321,7 +350,7 @@ public class CreateNoteActivity extends AppCompatActivity {
         layoutMiscellaneous.findViewById(R.id.viewColor5).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                selectNoteColor = "#D73DDC";
+                selectNoteColor = "#E1A6E7";
                 imageView5.setImageResource(R.drawable.ic_done);
                 imageView2.setImageResource(0);
                 imageView3.setImageResource(0);
@@ -351,16 +380,16 @@ public class CreateNoteActivity extends AppCompatActivity {
 
         if (alreadyAvailableNote != null && alreadyAvailableNote.getColor() != null && !alreadyAvailableNote.getColor().trim().isEmpty()){
                 switch (alreadyAvailableNote.getColor()){
-                    case "#FDBE3B":
+                    case "#E6E7A6":
                         layoutMiscellaneous.findViewById(R.id.viewColor2).performClick();
                         break;
-                    case "#EE3A3A":
+                    case "#E7A6A6":
                         layoutMiscellaneous.findViewById(R.id.viewColor3).performClick();
                         break;
-                    case "#438AE5":
+                    case "#A6C8E7":
                         layoutMiscellaneous.findViewById(R.id.viewColor4).performClick();
                         break;
-                    case "#D73DDC":
+                    case "#E1A6E7":
                         layoutMiscellaneous.findViewById(R.id.viewColor5).performClick();
                         break;
                     default:
@@ -404,6 +433,7 @@ public class CreateNoteActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+
         if (requestCode == REQUEST_CODE_SELECT_IMAGE && resultCode == RESULT_OK){
             if (data != null){
                 Uri selectImageUri = data.getData();
@@ -413,6 +443,7 @@ public class CreateNoteActivity extends AppCompatActivity {
                         InputStream inputStream = getContentResolver().openInputStream(selectImageUri);
                         Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
                         imageNote.setImageBitmap(bitmap);
+                        deleteImage.setVisibility(View.VISIBLE);
 
                         imageNote.setVisibility(View.VISIBLE);
 
@@ -423,6 +454,16 @@ public class CreateNoteActivity extends AppCompatActivity {
                     }
                 }
             }
+            deleteImage.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    imageNote.setVisibility(View.GONE);
+                    selectImagePath = null;
+                    deleteImage.setVisibility(View.GONE);
+
+                }
+            });
         }
     }
     private Bitmap getBitmapFromUri(Uri uri) throws IOException {

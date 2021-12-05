@@ -29,7 +29,7 @@
 
 <!--    <LinearLayout-->
 <!--        android:id="@+id/layoutSearch"-->
-<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_width="match_parent"-->
 <!--        android:layout_height="wrap_content"-->
 <!--        android:layout_marginStart="@dimen/_8sdp"-->
 <!--        android:layout_marginTop="@dimen/_15sdp"-->
@@ -39,13 +39,19 @@
 <!--        android:orientation="horizontal"-->
 <!--        android:paddingStart="@dimen/_10sdp"-->
 <!--        android:paddingEnd="@dimen/_10sdp"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
 <!--        app:layout_constraintTop_toTopOf="parent">-->
+
+<!--        <ImageView-->
+<!--            android:layout_width="@dimen/_20sdp"-->
+<!--            android:layout_height="@dimen/_20sdp"-->
+<!--            android:contentDescription="@string/app_name"-->
+<!--            android:src="@drawable/ic_search"-->
+<!--            app:tint="@color/colorSearchIcon" />-->
 
 <!--        <EditText-->
 <!--            android:id="@+id/inputSearch"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="@dimen/_35sdp"-->
 <!--            android:layout_marginStart="@dimen/_12sdp"-->
 <!--            android:background="@null"-->
 <!--            android:fontFamily="@font/ubuntu_regular"-->
@@ -56,20 +62,7 @@
 <!--            android:inputType="text"-->
 <!--            android:textColor="@color/colorWhite"-->
 <!--            android:textColorHint="@color/colorTextHint"-->
-<!--            android:textSize="@dimen/_13ssp"-->
-<!--            app:layout_constraintEnd_toStartOf="@id/iconSearch"-->
-<!--            app:layout_constraintStart_toEndOf="@id/textMyNotes" />-->
-<!--        <ImageView-->
-<!--            android:id="@+id/iconSearch"-->
-<!--            android:layout_width="@dimen/_20sdp"-->
-<!--            android:layout_height="@dimen/_20sdp"-->
-<!--            android:layout_marginEnd="@dimen/_12sdp"-->
-<!--            android:contentDescription="@string/app_name"-->
-<!--            android:src="@drawable/ic_search"-->
-<!--            app:tint="@color/colorSearchIcon"-->
-<!--            app:layout_constraintTop_toTopOf="parent"-->
-<!--            app:layout_constraintEnd_toEndOf="parent"/>-->
-
+<!--            android:textSize="@dimen/_13ssp"/>-->
 
 <!--    </LinearLayout>-->
     <androidx.recyclerview.widget.RecyclerView
