@@ -53,7 +53,7 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
 
     private Timer timer;
     private List<Note> noteSource;
-    DBHelper db;
+
     private boolean isEnable = false;
     private boolean isSelectAll = false;
     private List<Note> selectList = new ArrayList<>();
@@ -115,9 +115,11 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
                                     case R.id.menu_delete:
 
                                         notesListener.onNoteLongClicked(selectList);
-                                        for (Note note : notes){
-                                            selectList.remove(note);
-                                        }
+
+//                                        for (Note note : selectList){
+//                                            notes.remove(note);
+//                                        }
+//                                        selectList.clear();
                                         actionMode.finish();
 
                                         break;
@@ -141,8 +143,10 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
                         public void onDestroyActionMode(ActionMode actionMode) {
                                 isEnable = false;
                                 isSelectAll = false;
+
                                 selectList.clear();
-                                notifyDataSetChanged();
+                            notifyDataSetChanged();
+
                         }
                     };
                     ((AppCompatActivity) view.getContext()).startActionMode(callback);

@@ -63,12 +63,6 @@ public class MainActivity extends AppCompatActivity implements NotesListener {
         setContentView(R.layout.activity_main);
         db = new DBHelper(this);
 
-
-//        ActionBar actionBar;
-//        actionBar = getSupportActionBar();
-//        ColorDrawable colorDrawable = new ColorDrawable(Color.parseColor("#82E0AA"));
-//        actionBar.setBackgroundDrawable(colorDrawable);
-
         ImageView imageAddNoteMain = findViewById(R.id.imageAddNotesMain);
 
         imageAddNoteMain.setOnClickListener(new View.OnClickListener() {
@@ -93,26 +87,7 @@ public class MainActivity extends AppCompatActivity implements NotesListener {
 
         notesRecyclerView.setAdapter(notesAdapter);
         getNotes(REQUEST_CODE_SHOW_NOTES,false);
-//        EditText inputSearch= (EditText) findViewById(R.id.inputSearch);
-//        inputSearch.addTextChangedListener(new TextWatcher() {
-//            @Override
-//            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-//
-//            }
-//
-//            @Override
-//            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-//                   notesAdapter.CancelTimer();
-//            }
-//
-//            @Override
-//            public void afterTextChanged(Editable s) {
-//                    if (noteList.size() != 0){
-//                        notesAdapter.searchNotes(s.toString());
-//                    }
-//
-//            }
-//        });
+
     }
 
 
@@ -213,9 +188,9 @@ public class MainActivity extends AppCompatActivity implements NotesListener {
                     for (Note note : notes){
                         db.deleteNote(note.getId());
                     }
+
                         dialogDelete.hide();
                     getNotes(REQUEST_CODE_DELETE_SELECT,false);
-
 
                 }
             });
