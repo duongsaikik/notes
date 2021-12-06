@@ -60,7 +60,7 @@ public class CreateNoteActivity extends AppCompatActivity {
 
     private ImageView imageNote;
     private String selectImagePath;
-    private Button deleteImage;
+    private ImageView deleteImage;
     private Note alreadyAvailableNote;
     private ImageView imageDelete;
     private AlertDialog dialogDelete;
@@ -136,6 +136,13 @@ public class CreateNoteActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.create_note,menu);
+        MenuItem shareItem = menu.findItem(R.id.action_delete_note);
+
+        if (alreadyAvailableNote == null){
+            shareItem.setVisible(false);
+        }
+
+
         return true;
     }
 
@@ -257,15 +264,21 @@ public class CreateNoteActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View view) {
 
-                        if(db.deleteNote(alreadyAvailableNote.getId())){
-                            Intent intent = new Intent(CreateNoteActivity.this,MainActivity.class);
-                            intent.putExtra("isNoteDeleted",true);
-                            setResult(RESULT_OK,intent);
-                            startActivity(intent);
-
-                        }else{
-                            Toast.makeText(getApplicationContext(),"Xoá thất bại",Toast.LENGTH_SHORT).show();
-                       }
+//                        if(db.deleteNote(alreadyAvailableNote.getId())){
+//                            db.deleteNote(alreadyAvailableNote.getId())
+//                            Intent intent = new Intent(CreateNoteActivity.this,MainActivity.class);
+//                            intent.putExtra("isNoteDeleted",true);
+//                            setResult(RESULT_OK,intent);
+//                            startActivity(intent);
+//
+//                        }else{
+//                            Toast.makeText(getApplicationContext(),"Xoá thất bại",Toast.LENGTH_SHORT).show();
+//                       }
+                        db.deleteNote(alreadyAvailableNote.getId());
+                        Intent intent = new Intent(CreateNoteActivity.this,MainActivity.class);
+                        intent.putExtra("isNoteDeleted",true);
+                        setResult(RESULT_OK,intent);
+                        startActivity(intent);
                     }
                 });
                 view.findViewById(R.id.textCancel).setOnClickListener(new View.OnClickListener() {

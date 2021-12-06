@@ -2,6 +2,7 @@ package com.example.finalproject.adapters;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
@@ -30,6 +31,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelStoreOwner;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.finalproject.MainActivity;
 import com.example.finalproject.MainViewModel;
 import com.example.finalproject.R;
 import com.example.finalproject.entities.DBHelper;
@@ -111,14 +113,16 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
 
                                 switch (menuItem.getItemId()){
                                     case R.id.menu_delete:
+
                                         notesListener.onNoteLongClicked(selectList);
-                                        for (Note note : noteSource){
+                                        for (Note note : notes){
                                             selectList.remove(note);
                                         }
                                         actionMode.finish();
+
                                         break;
                                     case R.id.menu_selectAll:
-                                            if (selectList.size() == noteSource.size()){
+                                            if (selectList.size() == notes.size()){
                                                 isSelectAll = false;
                                                 selectList.clear();
                                             }else{
@@ -167,7 +171,7 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
     }
 
     private void ClickItem(NoteViewHolder holder) {
-        Note note = noteSource.get(holder.getAdapterPosition());
+        Note note = notes.get(holder.getAdapterPosition());
         if (holder.checkDelete.getVisibility() == View.GONE){
             holder.checkDelete.setVisibility(View.VISIBLE);
 
@@ -245,31 +249,32 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
         }
     }
     public void searchNotes(final String searchKeyWord){
-        timer = new Timer();
-        timer.schedule(new TimerTask() {
+//        timer = new Timer();
+//        timer.schedule(new TimerTask() {
+//            @Override
+//            public void run() {
+//
+//            }
+//        },500);
+        if (searchKeyWord.trim().isEmpty()){
+            notes=noteSource;
+        }else{
+            ArrayList<Note> temp = new ArrayList<>();
+            for (Note note: noteSource) {
+                if (note.getTitle().toLowerCase().contains(searchKeyWord.toLowerCase())
+                        || note.getSubtitle().toLowerCase().contains(searchKeyWord.toLowerCase())
+                        || note.getNoteText().toLowerCase().contains(searchKeyWord.toLowerCase())){
+                    temp.add(note);
+                }
+            }
+            notes = temp;
+        }
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
             public void run() {
-                if (searchKeyWord.trim().isEmpty()){
-                    notes=noteSource;
-                }else{
-                    ArrayList<Note> temp = new ArrayList<>();
-                    for (Note note: noteSource) {
-                        if (note.getTitle().toLowerCase().contains(searchKeyWord.toLowerCase())
-                                || note.getSubtitle().toLowerCase().contains(searchKeyWord.toLowerCase())
-                                || note.getNoteText().toLowerCase().contains(searchKeyWord.toLowerCase())){
-                            temp.add(note);
-                        }
-                    }
-                    notes = temp;
-                }
-                new Handler(Looper.getMainLooper()).post(new Runnable() {
-                    @Override
-                    public void run() {
-                        notifyDataSetChanged();
-                    }
-                });
+                notifyDataSetChanged();
             }
-        },500);
+        });
     }
     public void CancelTimer(){
         if (timer != null){

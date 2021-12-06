@@ -36,7 +36,7 @@
                 app:riv_corner_radius_top_left="@dimen/_10sdp"
                 app:riv_corner_radius_top_right="@dimen/_10sdp"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintBottom_toTopOf="@id/textSubTitle"
                 app:layout_constraintEnd_toEndOf="parent"/>
             <ImageView
                 android:id="@+id/checkDelete"
@@ -49,35 +49,38 @@
 
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"/>
+            <TextView
+                android:id="@+id/textSubTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_8sdp"
+                android:layout_marginEnd="@dimen/_8sdp"
+                android:layout_marginTop="@dimen/_4sdp"
+                android:layout_marginBottom="@dimen/_4sdp"
+                android:fontFamily="@font/ubuntu_regular"
+                android:includeFontPadding="false"
+                android:visibility="visible"
+                android:textColor="@color/colorNoteSubtitleText"
+                android:textSize="@dimen/_10ssp"
+                app:layout_constraintTop_toBottomOf="@id/imageNote"
+                />
+            <TextView
+                android:id="@+id/textNoteContent"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_100sdp"
+                android:layout_marginStart="@dimen/_8sdp"
+                android:layout_marginEnd="@dimen/_8sdp"
+                android:layout_marginTop="@dimen/_4sdp"
+                android:layout_marginBottom="@dimen/_4sdp"
+                android:fontFamily="@font/ubuntu_regular"
+                android:includeFontPadding="false"
+                android:textColor="@color/colorNoteSubtitleText"
+                android:textSize="@dimen/_12ssp"
+                app:layout_constraintTop_toBottomOf="@id/textSubTitle"
+                />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <TextView
-            android:id="@+id/textSubTitle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/_8sdp"
-            android:layout_marginEnd="@dimen/_8sdp"
-            android:layout_marginTop="@dimen/_4sdp"
-            android:layout_marginBottom="@dimen/_4sdp"
-            android:fontFamily="@font/ubuntu_regular"
-            android:includeFontPadding="false"
-            android:visibility="visible"
-            android:textColor="@color/colorNoteSubtitleText"
-            android:textSize="@dimen/_10ssp"
-            />
-        <TextView
-            android:id="@+id/textNoteContent"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/_100sdp"
-            android:layout_marginStart="@dimen/_8sdp"
-            android:layout_marginEnd="@dimen/_8sdp"
-            android:layout_marginTop="@dimen/_4sdp"
-            android:layout_marginBottom="@dimen/_4sdp"
-            android:fontFamily="@font/ubuntu_regular"
-            android:includeFontPadding="false"
-            android:textColor="@color/colorNoteSubtitleText"
-            android:textSize="@dimen/_12ssp"
-            />
+
     </LinearLayout>
 
     <TextView

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="createNote">#FFFFFFFF</color>
     <color name="colorPrimary">#E5E7E9</color>
     <color name="colorPrimaryDark">#292929</color>
     <color name="colorAccent">#FDBE3B</color>
@@ -27,4 +28,5 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="colorOption">#82E0AA</color>
+    <color name="linePrevent">#A6ACAF</color>
 </resources>

@@ -101,9 +101,9 @@ public class DBHelper extends SQLiteOpenHelper {
         db.update("Note",contentValues,"id = ?",new String[]{note.getId()});
         return true;
     }
-    public boolean deleteNote(String id){
+    public void deleteNote(String id){
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete("Note","id = ?" , new String[]{id});
-        return true;
+
     }
 }
