@@ -2,7 +2,7 @@
     <string name="app_name">Notepad</string>
     <string name="my_notes">My Notes</string>
     <string name="search_notes">Search notes</string>
-    <string name="note_title">Chủ đề...</string>
+    <string name="note_title">Tiêu đề...</string>
     <string name="node_subtitle">Phụ đề...</string>
     <string name="type_note_here">Nội dung...</string>
     <string name="miscellaneous">Màu nền</string>

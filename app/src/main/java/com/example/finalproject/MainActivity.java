@@ -44,6 +44,7 @@ public class MainActivity extends AppCompatActivity implements NotesListener {
         public static final int REQUEST_CODE_ADD_NOTE = 1;
         public static final int REQUEST_CODE_UPDATE = 2;
         public static final int REQUEST_CODE_SHOW_NOTES = 3;
+        public static final int REQUEST_CODE_DELETE_SELECT = 4;
         DBHelper db;
         private RecyclerView notesRecyclerView;
         private List<Note> noteList;
@@ -82,7 +83,7 @@ public class MainActivity extends AppCompatActivity implements NotesListener {
         );
 
         noteList = new ArrayList<>();
-        notesAdapter = new NotesAdapter(noteList,this);
+        notesAdapter = new NotesAdapter(noteList,this,this);
 
         notesRecyclerView.setAdapter(notesAdapter);
         getNotes(REQUEST_CODE_SHOW_NOTES,false);
@@ -150,6 +151,15 @@ public class MainActivity extends AppCompatActivity implements NotesListener {
 
     }
 
+    @Override
+    public void onNoteLongClicked(List<Note> notes) {
+       for (Note note : notes){
+           db.deleteNote(note.getId());
+       }
+        getNotes(REQUEST_CODE_DELETE_SELECT,false);
+    }
+
+
     private void getNotes(final int requestCode,final boolean isNoteDeleted){
         @SuppressLint("StaticFieldLeak")
         class GetNotesTask extends AsyncTask<Void, Void, List<Note>>{
@@ -183,6 +193,10 @@ public class MainActivity extends AppCompatActivity implements NotesListener {
                         noteList.add(noteClickedPosition,notes.get(noteClickedPosition));
                         notesAdapter.notifyItemChanged(noteClickedPosition);
                     }
+                }else if (requestCode == REQUEST_CODE_DELETE_SELECT){
+                    noteList.clear();
+                    noteList.addAll(notes);
+                    notesAdapter.notifyDataSetChanged();
                 }
 
 //               if(noteList.size() == 0){

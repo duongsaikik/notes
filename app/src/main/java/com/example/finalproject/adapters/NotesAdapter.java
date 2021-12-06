@@ -1,23 +1,38 @@
 package com.example.finalproject.adapters;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
+import android.view.ActionMode;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentActivity;
+import androidx.lifecycle.LifecycleOwner;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelStoreOwner;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.finalproject.MainViewModel;
 import com.example.finalproject.R;
+import com.example.finalproject.entities.DBHelper;
 import com.example.finalproject.entities.Note;
 import com.example.finalproject.listeners.NotesListener;
 import com.makeramen.roundedimageview.RoundedImageView;
@@ -33,19 +48,28 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
 
     private List<Note> notes;
     private NotesListener notesListener;
+
     private Timer timer;
     private List<Note> noteSource;
+    DBHelper db;
+    private boolean isEnable = false;
+    private boolean isSelectAll = false;
+    private List<Note> selectList = new ArrayList<>();
+    private MainViewModel mainViewModel;
+    private Activity activity;
 
-    public NotesAdapter(List<Note> notes,NotesListener notesListener)
+
+    public NotesAdapter(List<Note> notes,NotesListener notesListener,Activity activity)
     {
         this.notes = notes;
         this.notesListener=notesListener;
         noteSource=notes;
+        this.activity = activity;
     }
-
     @NonNull
     @Override
     public NoteViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        mainViewModel = new ViewModelProvider((FragmentActivity) activity).get(MainViewModel.class);
         return new NoteViewHolder(
                 LayoutInflater.from(parent.getContext()).inflate(
                         R.layout.item_container_note,
@@ -54,17 +78,106 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
                 )
         );
     }
-
     @Override
     public void onBindViewHolder(@NonNull NoteViewHolder holder, @SuppressLint("RecyclerView") int position) {
         holder.setNote(notes.get(position));
+        holder.layoutNote.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                if (!isEnable){
+                    ActionMode.Callback callback = new ActionMode.Callback() {
+                        @Override
+                        public boolean onCreateActionMode(ActionMode actionMode, Menu menu) {
+                            MenuInflater menuInflater = actionMode.getMenuInflater();
+                            menuInflater.inflate(R.menu.mul_del,menu);
+                            return true;
+                        }
+                        @Override
+                        public boolean onPrepareActionMode(ActionMode actionMode, Menu menu) {
+                            isEnable = true;
+                            ClickItem(holder);
+                            mainViewModel.getValue().observe((LifecycleOwner) activity
+                                    , new Observer<String>() {
+                                        @Override
+                                        public void onChanged(String s) {
+                                                actionMode.setTitle(String.format("%s Đã chọn",s));
+                                        }
+                                    });
 
+                            return true;
+                        }
+                        @Override
+                        public boolean onActionItemClicked(ActionMode actionMode, MenuItem menuItem) {
+
+                                switch (menuItem.getItemId()){
+                                    case R.id.menu_delete:
+                                        notesListener.onNoteLongClicked(selectList);
+                                        for (Note note : noteSource){
+                                            selectList.remove(note);
+                                        }
+                                        actionMode.finish();
+                                        break;
+                                    case R.id.menu_selectAll:
+                                            if (selectList.size() == noteSource.size()){
+                                                isSelectAll = false;
+                                                selectList.clear();
+                                            }else{
+                                                isSelectAll = true;
+                                                selectList.clear();
+                                                selectList.addAll(notes);
+                                            }
+                                            mainViewModel.setValue(String.valueOf(selectList.size()));
+                                            notifyDataSetChanged();
+                                        break;
+                                }
+                            return true;
+                        }
+
+                        @Override
+                        public void onDestroyActionMode(ActionMode actionMode) {
+                                isEnable = false;
+                                isSelectAll = false;
+                                selectList.clear();
+                                notifyDataSetChanged();
+                        }
+                    };
+                    ((AppCompatActivity) view.getContext()).startActionMode(callback);
+                }else{
+                    ClickItem(holder);
+                }
+                return true;
+            }
+        });
         holder.layoutNote.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                notesListener.onNoteClicked(notes.get(position),position);
+                if (isEnable){
+                    ClickItem(holder);
+                }else{
+                    notesListener.onNoteClicked(notes.get(position),position);
+                }
             }
         });
+       if (isSelectAll){
+           holder.checkDelete.setVisibility(View.VISIBLE);
+
+       }else{
+           holder.checkDelete.setVisibility(View.GONE);
+       }
+    }
+
+    private void ClickItem(NoteViewHolder holder) {
+        Note note = noteSource.get(holder.getAdapterPosition());
+        if (holder.checkDelete.getVisibility() == View.GONE){
+            holder.checkDelete.setVisibility(View.VISIBLE);
+
+            selectList.add(note);
+        }else{
+            holder.checkDelete.setVisibility(View.GONE);
+
+            selectList.remove(note);
+        }
+        mainViewModel.setValue(String.valueOf(selectList.size()));
     }
 
     @Override
@@ -81,7 +194,7 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
         TextView textTitle, textSubTitle, textDateTime,textNoteContent;
         LinearLayout layoutNote;
         RoundedImageView imageNote;
-
+        ImageView checkDelete;
          NoteViewHolder(@NonNull View itemView) {
             super(itemView);
             textTitle = itemView.findViewById(R.id.textTitle);
@@ -90,6 +203,7 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
             textDateTime = itemView.findViewById(R.id.textDateTime);
             layoutNote = itemView.findViewById(R.id.layoutNote);
             imageNote = itemView.findViewById(R.id.imageNote);
+            checkDelete = itemView.findViewById(R.id.checkDelete);
 
          }
         void setNote(Note note){
@@ -128,9 +242,7 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
 
                 imageNote.setVisibility(View.GONE);
             }
-
         }
-
     }
     public void searchNotes(final String searchKeyWord){
         timer = new Timer();

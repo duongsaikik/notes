@@ -22,7 +22,7 @@ public class DBHelper extends SQLiteOpenHelper {
     private static final String CONTENT_NOTE = "content";
     private static final String _COLOR = "color";
     private static final String IMAGE = "image";
-    private static final String WEB_LINK = "link";
+
 
     public DBHelper(Context context){
         super(context,DATABASE_NAME,null,1);
@@ -38,8 +38,8 @@ public class DBHelper extends SQLiteOpenHelper {
                 SUB_TITLE + " TEXT, " +
                 CONTENT_NOTE + " TEXT, " +
                 _COLOR + " TEXT, " +
-                IMAGE + " TEXT, " +
-                WEB_LINK + " TEXT);";
+
+                IMAGE + " TEXT);";
 //        db.execSQL("create table Note (id integer primary key, title text, datenote text, subtitle text, content text, color text, link text)" );
             db.execSQL(query);
     }
@@ -59,7 +59,7 @@ public class DBHelper extends SQLiteOpenHelper {
         contentValues.put("content",note.getNoteText());
         contentValues.put("color",note.getColor());
         contentValues.put("image",note.getImage());
-        contentValues.put("link",note.getWebLink());
+
         db.insert("Note",null,contentValues);
         return true;
     }
@@ -79,7 +79,7 @@ public class DBHelper extends SQLiteOpenHelper {
             note.setNoteText(res.getString(res.getColumnIndexOrThrow(CONTENT_NOTE)));
             note.setColor(res.getString(res.getColumnIndexOrThrow(_COLOR)));
             note.setImage(res.getString(res.getColumnIndexOrThrow(IMAGE)));
-            note.setWebLink(res.getString(res.getColumnIndexOrThrow(WEB_LINK)));
+
             arrayList.add(
                     note
             );
@@ -97,7 +97,7 @@ public class DBHelper extends SQLiteOpenHelper {
         contentValues.put(CONTENT_NOTE,note.getNoteText());
         contentValues.put(_COLOR,note.getColor());
         contentValues.put(IMAGE,note.getImage());
-        contentValues.put(WEB_LINK,note.getWebLink());
+
         db.update("Note",contentValues,"id = ?",new String[]{note.getId()});
         return true;
     }
